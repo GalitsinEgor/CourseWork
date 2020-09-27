@@ -1,0 +1,2 @@
+C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask\Debug\CourseTask.DomainModel.pdb
+C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask.DomainModel\Debug\CourseTask.DomainModel.pdb

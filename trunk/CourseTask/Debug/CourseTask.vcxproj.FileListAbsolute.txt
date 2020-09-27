@@ -1,0 +1,2 @@
+C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask\Debug\CourseTask.Console.exe
+C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask\Debug\CourseTask.Console.pdb
