@@ -154,6 +154,11 @@
     <Image Include="CourseTask.Windows.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CourseTask.DomainModel\CourseTask.DomainModel.vcxproj">
+      <Project>{2978a2b2-a026-442e-a9e0-9cec4e3a66ad}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

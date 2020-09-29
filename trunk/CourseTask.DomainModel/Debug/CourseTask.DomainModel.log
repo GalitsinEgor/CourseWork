@@ -1,6 +1,6 @@
 ﻿  Matrix.cpp
-C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask.DomainModel\Matrix.cpp(10,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask.DomainModel\Matrix.cpp(18,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask.DomainModel\Matrix.cpp(33,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask.DomainModel\Matrix.cpp(35,24): warning C4018: '<': signed/unsigned mismatch
-  CourseTask.DomainModel.vcxproj -> C:\Users\GreenCrab\Desktop\MPEI_PROG\my\CourseWork\trunk\CourseTask\Debug\CourseTask.DomainModel.lib
+C:\Users\Admin\Documents\MyProjects\CourseWork\trunk\CourseTask.DomainModel\Matrix.cpp(50,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Admin\Documents\MyProjects\CourseWork\trunk\CourseTask.DomainModel\Matrix.cpp(58,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Admin\Documents\MyProjects\CourseWork\trunk\CourseTask.DomainModel\Matrix.cpp(73,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Admin\Documents\MyProjects\CourseWork\trunk\CourseTask.DomainModel\Matrix.cpp(75,24): warning C4018: '<': signed/unsigned mismatch
+  CourseTask.DomainModel.vcxproj -> C:\Users\Admin\Documents\MyProjects\CourseWork\trunk\CourseTask\Debug\CourseTask.DomainModel.lib

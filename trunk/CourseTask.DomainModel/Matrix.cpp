@@ -1,6 +1,46 @@
 ﻿#include "pch.h"
 #include "Matrix.h"
 
+
+std::wstring temp2;
+Matrix::Matrix(std::wstring str) {
+
+	std::wstring temp;
+	std::wstringstream lineJoined(str);
+
+	size_t posn;
+	std::wstring replaceFrom = L"\r\n";
+	std::wstring replaceTo = L"SOMETHING";
+	while (std::wstring::npos != (posn = str.find(replaceFrom)))
+	{
+		str.replace(posn, replaceFrom.length(), L"\n");
+	}
+
+
+	temp2 = str;
+	/*while (lineJoined >> temp)
+	{
+		temp2 = temp;
+	}*/
+
+	/*while (std::getline(lineJoined, temp, L'\n')) {
+		std::wstringstream spaceJoined(temp);
+		temp2 = temp;
+		/*while (std::getline(spaceJoined, temp, L' ')){
+			
+		}
+
+		
+	}*/
+		
+
+	
+
+		
+
+
+}
+
 Matrix::Matrix(int** array, int width, int height) {
 	Matrix::width = width;
 	Matrix::height = height;

@@ -3,6 +3,7 @@
 
 #include "framework.h"
 #include "CourseTask.Windows.h"
+#include "../CourseTask.DomainModel/Matrix.h"
 
 #define MAX_LOADSTRING 100
 
@@ -12,6 +13,10 @@ const LPCWSTR szWindowClass = L"mainWindowClass";         // the main window cla
 const int mwWidth = 800;
 const int mwHeight = 600;
 
+HWND resultLabelHandler;
+HWND textArea0;
+HWND textArea1;
+
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -19,6 +24,7 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 HWND CreateTextArea(HWND, int);
 HWND CreateButton(HWND, LPCWSTR);
 HWND CreateResultLabel(HWND);
+Matrix CreateMatrixOfTextArea(HWND);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -105,8 +111,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - post a quit message and return
 //
 //
-HWND resultLabelHandler;
-int counter = 0;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     
@@ -115,19 +119,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
-        CreateTextArea(hWnd, 0);
-        CreateTextArea(hWnd, 1);
-        CreateButton(hWnd, L"Рассчитать");
+        textArea0 = CreateTextArea(hWnd, 0);
+        textArea1 = CreateTextArea(hWnd, 1);
         resultLabelHandler = CreateResultLabel(hWnd);
+        CreateButton(hWnd, L"Рассчитать");
         break;
     case WM_COMMAND:
         if (LOWORD(wParam) == 10000)
         {
-            std::wstring df = std::wstring(L"Result: ") + std::to_wstring(counter);
-            LPCWSTR msg = df.c_str(); 
+            Matrix matrix = CreateMatrixOfTextArea(textArea0);
+            std::wstring msg = std::wstring(L"Result: ") + std::to_wstring(matrix.GetAverage());
 
-            SetWindowText(resultLabelHandler, msg);
-            counter++;
+            SetWindowText(resultLabelHandler, msg.c_str());
             //MessageBox(hWnd, TEXT("Button Pressed"), TEXT(""), 0);
         }
         break;
@@ -175,11 +178,24 @@ HWND CreateButton(HWND parent, LPCWSTR text) {
 }
 
 HWND CreateResultLabel(HWND parent) {
-    HWND hLabel = CreateWindow(L"static", L"ST_U",
+    HWND hLabel = CreateWindow(L"static", L"",
         WS_CHILD | WS_VISIBLE | WS_TABSTOP,
         430, 10, 200, 50,
         parent, NULL,
         (HINSTANCE)GetWindowLong(parent, GWL_HINSTANCE), NULL);
 
     return hLabel;
+}
+
+Matrix CreateMatrixOfTextArea(HWND textArea) {
+
+    DWORD dwTextSize = 500;
+    DWORD dwBufferSize = dwTextSize + 1;
+    LPWSTR pszText = (LPWSTR)GlobalAlloc(GPTR, dwBufferSize * sizeof(LPWSTR));
+    GetWindowTextW(textArea, pszText, dwTextSize);
+    std::wstring str = std::wstring(pszText);
+    GlobalFree(pszText);
+
+    Matrix matrix(str);
+    return matrix;
 }
