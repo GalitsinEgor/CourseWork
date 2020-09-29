@@ -7,15 +7,18 @@
 #define MAX_LOADSTRING 100
 
 // Global Variables:
-HINSTANCE hInst;                                // current instance
-WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
-WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+const LPCWSTR szTitle = L"Title";                 // The title bar text
+const LPCWSTR szWindowClass = L"mainWindowClass";         // the main window class name
+const int mwWidth = 800;
+const int mwHeight = 600;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+HWND CreateTextArea(HWND, int);
+HWND CreateButton(HWND, LPCWSTR);
+HWND CreateResultLabel(HWND);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -25,11 +28,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: Place code here.
-
     // Initialize global strings
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_COURSETASKWINDOWS, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
     // Perform application initialization:
@@ -64,23 +63,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
-    WNDCLASSEXW wcex;
-
-    wcex.cbSize = sizeof(WNDCLASSEX);
-
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = WndProc;
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_COURSETASKWINDOWS));
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_COURSETASKWINDOWS);
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-
-    return RegisterClassExW(&wcex);
+    WNDCLASS wcex = { 0 };
+    wcex.lpfnWndProc = WndProc;
+    wcex.hInstance = hInstance;
+    wcex.lpszClassName = szWindowClass;
+    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)COLOR_APPWORKSPACE;
+    return RegisterClass(&wcex);
 }
 
 //
@@ -95,18 +84,13 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // Store instance handle in our global variable
-
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+   HWND hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPED | WS_VISIBLE | WS_SYSMENU,
+      10, 10, mwWidth, mwHeight, NULL, NULL, hInstance, NULL);
 
    if (!hWnd)
    {
       return FALSE;
    }
-
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
 
    return TRUE;
 }
@@ -121,33 +105,30 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - post a quit message and return
 //
 //
+HWND resultLabelHandler;
+int counter = 0;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    
+    
+
     switch (message)
     {
-    case WM_COMMAND:
-        {
-            int wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
-        }
+    case WM_CREATE:
+        CreateTextArea(hWnd, 0);
+        CreateTextArea(hWnd, 1);
+        CreateButton(hWnd, L"Рассчитать");
+        resultLabelHandler = CreateResultLabel(hWnd);
         break;
-    case WM_PAINT:
+    case WM_COMMAND:
+        if (LOWORD(wParam) == 10000)
         {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
-            EndPaint(hWnd, &ps);
+            std::wstring df = std::wstring(L"Result: ") + std::to_wstring(counter);
+            LPCWSTR msg = df.c_str(); 
+
+            SetWindowText(resultLabelHandler, msg);
+            counter++;
+            //MessageBox(hWnd, TEXT("Button Pressed"), TEXT(""), 0);
         }
         break;
     case WM_DESTROY:
@@ -159,22 +140,46 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// Message handler for about box.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
+HWND CreateTextArea(HWND parent, int index) {
+    int x = 10;
+    int y = 10;
+    int width = 200;
+    int height = 150;
 
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-        {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
-        }
-        break;
-    }
-    return (INT_PTR)FALSE;
+    x = x + (width * index) + (x * index);
+
+    HWND textBox = CreateWindow(L"EDIT", 
+        NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL, 
+        x, y, width, height,
+        parent, nullptr, nullptr, nullptr);
+
+    return textBox;
+         
+}
+
+HWND CreateButton(HWND parent, LPCWSTR text) {
+    HWND hwndButton = CreateWindow(
+        L"BUTTON",  // Predefined class; Unicode assumed 
+        text,      // Button text 
+        WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
+        10,         // x position 
+        200,         // y position 
+        100,        // Button width
+        50,        // Button height
+        parent,     // Parent window
+        (HMENU)10000,       
+        (HINSTANCE)GetWindowLongPtr(parent, GWLP_HINSTANCE),
+        NULL);      // Pointer not needed.
+
+    return hwndButton;
+}
+
+HWND CreateResultLabel(HWND parent) {
+    HWND hLabel = CreateWindow(L"static", L"ST_U",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP,
+        430, 10, 200, 50,
+        parent, NULL,
+        (HINSTANCE)GetWindowLong(parent, GWL_HINSTANCE), NULL);
+
+    return hLabel;
 }
