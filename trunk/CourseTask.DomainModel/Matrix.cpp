@@ -17,21 +17,16 @@ Matrix::Matrix(std::wstring str) {
 	}
 
 
-	temp2 = str;
-	/*while (lineJoined >> temp)
-	{
-		temp2 = temp;
-	}*/
+	
 
-	/*while (std::getline(lineJoined, temp, L'\n')) {
+	while (std::getline(lineJoined, temp)) {
 		std::wstringstream spaceJoined(temp);
 		temp2 = temp;
-		/*while (std::getline(spaceJoined, temp, L' ')){
+		while (std::getline(spaceJoined, temp, L' ')){
 			
 		}
 
-		
-	}*/
+	}
 		
 
 	

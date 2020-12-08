@@ -122,7 +122,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         textArea0 = CreateTextArea(hWnd, 0);
         textArea1 = CreateTextArea(hWnd, 1);
         resultLabelHandler = CreateResultLabel(hWnd);
-        CreateButton(hWnd, L"Рассчитать");
+        CreateButton(hWnd, L"Enter");
         break;
     case WM_COMMAND:
         if (LOWORD(wParam) == 10000)
